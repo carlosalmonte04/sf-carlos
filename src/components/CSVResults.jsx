@@ -1,22 +1,21 @@
-import React from 'react';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const CSVResults = (props) => {
 
-  function handleSignupBtnClick(e) {
-    e.preventDefault()
-    props.toggleSearchForm()
-  }
-
   return (
     <div>
-      <div className={`search-error-container csv ${props.loginError && props.isDisplaying ? '' : 'away'}`} >
-          <span className={`search-error`} >search error</span>
-      </div>
-      <div className={`form-wrapper boxed-search-results csv ${props.isDisplaying ? '' : 'away'}`}>
+      <div className={`form-wrapper boxed-search-results csv ${props.isSearchFormDisplaying ? '' : 'away'}`}>
         <span>CSV parsed to hash table ⚡️⚡️</span>
       </div>
     </div>
   )
+}
+
+const { bool } = PropTypes
+
+CSVResults.propTypes = {
+  isSearchFormDisplaying: bool.isRequired
 }
 
 export default CSVResults

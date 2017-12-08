@@ -3,16 +3,12 @@ import PropTypes from 'prop-types'
 
 const SearchResults = (props) => {
 
-  function handleSignupBtnClick(e) {
-    e.preventDefault()
-    props.toggleSearchForm()
-  }
   return (
     <div>
-      <div className={`search-error-container ${props.loginError && props.isShowing ? '' : 'away'}`} >
+      <div className={`search-error-container ${props.loginError && props.isDisplaying ? '' : 'away'}`} >
           <span className={`search-error`} >search error</span>
       </div>
-      <div className={`form-wrapper boxed-search-results ${props.isShowing ? '' : 'away'}`}>
+      <div className={`form-wrapper boxed-search-results ${props.isDisplaying ? '' : 'away'}`}>
         <div className="score-container">
           <strong>coding Percentile</strong>
           <span>{(props.codingPercentile).toFixed(2)}</span>

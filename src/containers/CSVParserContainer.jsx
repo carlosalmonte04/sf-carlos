@@ -4,50 +4,60 @@ import CSVSearch from '../components/CSVSearch.jsx'
 import CSVResults from '../components/CSVResults.jsx'
 import fetchCSV from '../actions/fetchCSV'
 
+
+const defaultUrls = {
+  'companies': 'https://s3.amazonaws.com/simple-fractal-recruiting/companies.csv',
+  'score-records': 'https://s3.amazonaws.com/simple-fractal-recruiting/score-records.csv'
+}
+
 class CSVParserContainer extends Component {
+
   state = {
     isSearchFormDisplaying: true,
-    csvName: '',
+    CSVUrl: defaultUrls[this.props.CSVType],
+    CSVType: this.props.CSVType,
     parseError: false,
+    parsedCorrectly: false
   }
 
-  handleCsvParse = async (e, CSVUrl, CSVType) => {
+  handleCsvParse = async (e) => {
     e.preventDefault()
+    
+    const { CSVUrl, CSVType } = this.state
     const isResponseValid = await this.props.fetchCSV(CSVUrl, CSVType)
+
     if (isResponseValid) {
-      this.setState({isSearchFormDisplaying: false})
+      this.setState({ // animate box
+        isSearchFormDisplaying: false
+      })
       setTimeout(() => {
-        this.setState({
-          isSearchFormDisplaying: true
+        this.setState({ // 'deanimate' box
+          isSearchFormDisplaying: true,
+          parsedCorrectly: true,
         })
       }, 2000)
     } else {
-      this.setState({
+      this.setState({ // animate error
         parseError: true
       })
       setTimeout(() => {
-        this.setState({
+        this.setState({ // 'deanimate' error
           parseError: false
         })
-      }, 2000)
+      }, 4000)
     }
   }
 
-  handleSearchAgain = (e) => {
-    e.preventDefault()
-    this.setState({
-      isSearchFormDisplaying: true,
-      candidateid: '',
-      searchError: false
-    })
+  handleInputChange = (e) => {
+    const CSVUrl = e.target.value
+    this.setState({ CSVUrl })
   }
 
   render() {
-    console.log("this.props.CSVType", this.props.CSVType)
     return (
       <div className={`csv-parser-container ${this.props.csvType === 'companies' ? 'right' : 'left'}`}>
-        <CSVSearch  CSVType={this.props.CSVType} parseError={this.state.parseError} isDisplaying={this.state.isSearchFormDisplaying} csvType={this.props.csvType} handleCsvParse={this.handleCsvParse} />
-        <CSVResults isDisplaying={!this.state.isSearchFormDisplaying} csvType={this.props.csvType} handleCsvParse={this.handleCsvParse} handleSearchAgain={this.handleSearchAgain}/>
+        <CSVSearch { ...this.state } handleCsvParse={this.handleCsvParse} handleInputChange={this.handleInputChange} />
+        <CSVResults isSearchFormDisplaying={!this.state.isSearchFormDisplaying} />
       </div>
     )
   }

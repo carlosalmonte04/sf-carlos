@@ -2,19 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types'
 
 const SearchForm = (props) => {
-  const { candidatesAsOptions } = props
+  let { candidatesAsOptions } = props
+  candidatesAsOptions = candidatesAsOptions.map(candidateId => <li key={candidateId} id={candidateId} value={candidateId} onClick={props.handleOptionClick}>{candidateId}</li>)
   return (
     <div>
-      <div className={`search-error-container ${props.loginError && props.isShowing ? '' : 'away'}`} >
-          <span className={`search-error`} >search error</span>
+      <div className={`search-error-container ${props.searchError && props.isDisplaying ? '' : 'away'}`} >
+          <p className={`search-error`} >Search Error. CSVs parsed correctly? Candidate selected?</p>
       </div>
-      <div className={`form-wrapper boxed-search-form ${props.isShowing ? '' : 'away'}`}>
+      <div className={`form-wrapper boxed-search-form ${props.isDisplaying ? '' : 'away'}`}>
         <form id="search-form" className="form" >
-          <input type={'text'} onChange={props.handleInputChange} required value={props.candidateId} />
+          <input type={'text'} onChange={props.handleInputChange} value={props.candidateId} required/>
           <label>candidate id</label>
           <div>
             <ul className="candidates-as-options">
-              {candidatesAsOptions.map(candidateId => <li key={candidateId} id={candidateId} value={candidateId} onClick={props.handleOptionClick}>{candidateId}</li>)}
+              {candidatesAsOptions}
             </ul>
           </div>
           <div className="btns-container">
@@ -26,10 +27,21 @@ const SearchForm = (props) => {
   )
 }
 
-const { array } = PropTypes
+const {
+  array,
+  string, 
+  bool,
+  func
+} = PropTypes
 
 SearchForm.propTypes = {
-  candidatesAsOptions: array.isRequired
+  candidatesAsOptions: array.isRequired,
+  searchError: bool.isRequired,
+  isDisplaying: bool.isRequired,
+  candidateId: string,
+  handleSubmit: func.isRequired,
+  handleOptionClick: func.isRequired,
+  handleInputChange: func.isRequired,
 }
 
 SearchForm.defaultProps = {
