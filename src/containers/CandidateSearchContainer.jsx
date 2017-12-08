@@ -39,43 +39,54 @@ class CandidateSearchContainer extends Component {
     const { candidateId } = this.state
     const { candidates } = this.props
     const candidate = this.props.candidates[candidateId]
-    const candidateCompany   = this.props.companies[candidate['companyId']]
-    const { companies } = this.props
-    
-    const similarCompaniesIds = []
-    const similarPeers = []
+    if (candidate) {
+      const candidateCompany   = this.props.companies[candidate['companyId']]
+      const { companies } = this.props
+      
+      const similarCompaniesIds = []
+      const similarPeers = []
 
-    for (const company in companies) {
-      if (Math.abs(candidateCompany["fractalIndex"] - companies[company]["fractalIndex"]) < 0.15) {
-        similarCompaniesIds.push(company)
+      for (const company in companies) {
+        if (Math.abs(candidateCompany["fractalIndex"] - companies[company]["fractalIndex"]) < 0.15) {
+          similarCompaniesIds.push(company)
+        }
       }
-    }
 
-    for (const similarCandidateId in candidates) {
-      const similarCandidate = candidates[similarCandidateId]
-      if (similarCompaniesIds.includes(similarCandidate.companyId)
-          && similarCandidate.title === candidate.title) {
-        similarPeers.push(similarCandidate)
+      for (const similarCandidateId in candidates) {
+        const similarCandidate = candidates[similarCandidateId]
+        if (similarCompaniesIds.includes(similarCandidate.companyId)
+            && similarCandidate.title === candidate.title) {
+          similarPeers.push(similarCandidate)
+        }
       }
+
+      const codingSorted = similarPeers.sort((a, b) => parseInt(a.codingScore) - parseInt(b.codingScore))
+      const codingIdx = codingSorted.indexOf(candidate)
+
+      const communicationSorted = similarPeers.sort((a, b) => parseInt(a.communicationScore) - parseInt(b.communicationScore))
+      const communicationIdx = communicationSorted.indexOf(candidate)
+
+      const codingPercentile = (codingIdx + 1 / similarPeers.length)
+      const communicationPercentile = (communicationIdx + 1 / similarPeers.length)
+
+      this.setState({
+        codingPercentile,
+        communicationPercentile
+      })
+
+      this.setState({
+        isSearchFormDisplaying: false
+      })
+    } else {
+      this.setState({
+        searchError: true
+      })
+      setTimeout(() => {
+        this.setState({
+          searchError: false
+        })
+      }, 2000)
     }
-
-    const codingSorted = similarPeers.sort((a, b) => parseInt(a.codingScore) - parseInt(b.codingScore))
-    const codingIdx = codingSorted.indexOf(candidate)
-
-    const communicationSorted = similarPeers.sort((a, b) => parseInt(a.communicationScore) - parseInt(b.communicationScore))
-    const communicationIdx = communicationSorted.indexOf(candidate)
-
-    const codingPercentile = (codingIdx + 1 / similarPeers.length)
-    const communicationPercentile = (communicationIdx + 1 / similarPeers.length)
-
-    this.setState({
-      codingPercentile,
-      communicationPercentile
-    })
-
-    this.setState({
-      isSearchFormDisplaying: false
-    })
   }
 
   handleSearchAgain = (e) => {
