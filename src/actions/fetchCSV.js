@@ -16,7 +16,7 @@ export default function fetchCSV(CSVUrl, CSVType) {
       .then(res => res.json())
       .catch(err => false)
       .then(data => {
-        if (!data.error) {
+        if (!data.error && !!data) {
           CSVType === 'companies' 
             ? dispatch(setCompaniesInState(data))
             : dispatch(setScoreRecordsInState(data))

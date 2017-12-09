@@ -6,7 +6,9 @@ const SearchForm = (props) => {
   return (
     <div>
       <div className={`search-error-container csv ${props.parseError && props.isSearchFormDisplaying ? '' : 'away'}`} >
-          <span className={`search-error`} >error parsing csv. Valid url? Heroku dynos being lazy?</span>
+          {props.isLoading
+            ? <span className={`search-loading`} >Connecting to api...</span>
+            : <span className={`search-error`} >error parsing csv. Valid url? Heroku dynos being lazy?</span>}
       </div>
       <div className={`form-wrapper boxed-search-form csv ${props.isSearchFormDisplaying ? '' : 'away'} ${props.parsedCorrectly ? 'success' : ''}`}>
         <form id="search-form" className="form csv" >

@@ -17,18 +17,22 @@ class CSVParserContainer extends Component {
     CSVUrl: defaultUrls[this.props.CSVType],
     CSVType: this.props.CSVType,
     parseError: false,
-    parsedCorrectly: false
+    parsedCorrectly: false,
+    isLoading: false
   }
 
   handleCsvParse = async (e) => {
     e.preventDefault()
+
+    this.setState({ isLoading: true })
     
     const { CSVUrl, CSVType } = this.state
     const isResponseValid = await this.props.fetchCSV(CSVUrl, CSVType)
-
+    console.log("isResponseValid", isResponseValid)
     if (isResponseValid) {
       this.setState({ // animate box
-        isSearchFormDisplaying: false
+        isSearchFormDisplaying: false,
+          isLoading: false
       })
       setTimeout(() => {
         this.setState({ // 'deanimate' box
@@ -37,8 +41,10 @@ class CSVParserContainer extends Component {
         })
       }, 2000)
     } else {
+      console.log("error")
       this.setState({ // animate error
-        parseError: true
+        parseError: true,
+        isLoading: false
       })
       setTimeout(() => {
         this.setState({ // 'deanimate' error

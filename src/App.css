@@ -67,6 +67,21 @@ body {
   font-weight: 100;
 }
 
+.search-loading {
+  align-self: center;
+  text-align: center;
+  display: flex;
+  position: absolute;
+  background: linear-gradient(#62a7ab, #6bb8be);
+  z-index: 99;
+  color: white;
+  width: 48%;
+  border-radius: 3px;
+  justify-content: center;
+  box-shadow: -2px 2px #4e4e4e;
+  font-weight: 100;
+}
+
 @keyframes jumpy {
     0%   {transform: translateY(0px);}
     50%   {transform: translateY(-5px);}
